@@ -5,6 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
+    public enum State
+    {
+        Move,
+        Roll,
+        Attack
+    }
+
+    public State CurrentState;
 
     public Dictionary<ButtonUI.Button, KeyCode> settings;
 
