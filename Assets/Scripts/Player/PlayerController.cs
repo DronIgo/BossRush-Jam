@@ -16,7 +16,19 @@ public class PlayerController : MonoBehaviour
 
     public Dictionary<ButtonUI.Button, KeyCode> settings;
 
+    public float attackDuration = 0.8f;
+    public float dashDuration = 0.5f;
+
+    public float attackCooldown = 0.8f;
+
+    public float defaultSpeed = 3.0f;
+    public float speedWhileAttacking = 0.8f;
+
     public float speed = 3.0f;
+
+
+    private bool _attackAvialable = true;
+
     private void MoveUp()
     {
         transform.position += new Vector3(0.0f, 1.0f, 0.0f) * Time.deltaTime * speed;
@@ -33,7 +45,23 @@ public class PlayerController : MonoBehaviour
     {
         transform.position += new Vector3(-1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
     }
+    private void Attack()
+    {
+        if (!_attackAvialable) return;
+        speed = speedWhileAttacking;
+        CurrentState = State.Attack;
+        _attackAvialable = false;
+        StartCoroutine(ResetAttack());
+    }
 
+    IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(attackDuration);
+        speed = defaultSpeed;
+        CurrentState = State.Move;
+        yield return new WaitForSeconds(attackCooldown);
+        _attackAvialable = true;
+    }
     private void Awake()
     {
         Instance = this;
@@ -41,6 +69,7 @@ public class PlayerController : MonoBehaviour
         InputManager.Instance.SubscribeToButton(MoveDown, KeyCode.S);
         InputManager.Instance.SubscribeToButton(MoveLeft, KeyCode.A);
         InputManager.Instance.SubscribeToButton(MoveRight, KeyCode.D);
+        InputManager.Instance.SubscribeToButton(Attack, KeyCode.R);
 
         settings = new Dictionary<ButtonUI.Button, KeyCode>();
 
@@ -48,11 +77,12 @@ public class PlayerController : MonoBehaviour
         settings.Add(ButtonUI.Button.MoveDown, KeyCode.S);
         settings.Add(ButtonUI.Button.MoveLeft, KeyCode.A);
         settings.Add(ButtonUI.Button.MoveRight, KeyCode.D);
+        settings.Add(ButtonUI.Button.Attack, KeyCode.R);
     }
 
     public void SetAction(ButtonUI.Button button, KeyCode key)
     {
-        Debug.Log(button + " " + key);
+        //Debug.Log(button + " " + key);
         switch (button)
         {
             case ButtonUI.Button.MoveUp:

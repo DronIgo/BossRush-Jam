@@ -26,5 +26,20 @@ public class PlayerAnimator : MonoBehaviour
         _animator.SetFloat("x_speed", velocity.x);
         _animator.SetFloat("y_speed", velocity.y);
         _animator.SetFloat("speed", velocity.x * velocity.x + velocity.y * velocity.y);
+        switch (state)
+        {
+            case PlayerController.State.Move:
+                _animator.SetBool("dash", false);
+                _animator.SetBool("attack", false);
+                break;
+            case PlayerController.State.Roll:
+                _animator.SetBool("dash", true);
+                _animator.SetBool("attack", false);
+                break;
+            case PlayerController.State.Attack:
+                _animator.SetBool("dash", false);
+                _animator.SetBool("attack", true);
+                break;
+        }
     }
 }
