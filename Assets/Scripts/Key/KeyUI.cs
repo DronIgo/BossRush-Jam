@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(DragAndDrop))]
 public class KeyUI : MonoBehaviour
 {
     private DragAndDrop _dragAndDrop;
