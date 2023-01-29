@@ -73,59 +73,45 @@ public class PlayerController : MonoBehaviour
 
         settings = new Dictionary<ButtonUI.Button, KeyCode>();
 
-        settings.Add(ButtonUI.Button.MoveUp, KeyCode.W);
-        settings.Add(ButtonUI.Button.MoveDown, KeyCode.S);
-        settings.Add(ButtonUI.Button.MoveLeft, KeyCode.A);
-        settings.Add(ButtonUI.Button.MoveRight, KeyCode.D);
-        settings.Add(ButtonUI.Button.Attack, KeyCode.R);
+        UpdateSettings(ButtonUI.Button.MoveUp, KeyCode.W);
+        UpdateSettings(ButtonUI.Button.MoveDown, KeyCode.S);
+        UpdateSettings(ButtonUI.Button.MoveLeft, KeyCode.A);
+        UpdateSettings(ButtonUI.Button.MoveRight, KeyCode.D);
+        UpdateSettings(ButtonUI.Button.Attack, KeyCode.R);
+    }
+
+    private void UpdateSettings(ButtonUI.Button button, KeyCode key)
+    {
+        if (settings.ContainsKey(button))
+        {
+            KeyUIManager.Instance.UpdateButtonUI(settings[button], ButtonUI.Button.None);
+            InputManager.Instance.ClearButton(settings[button]);
+            settings.Remove(button);
+        }
+        settings.Add(button, key);
+        KeyUIManager.Instance.UpdateButtonUI(key, button);
     }
 
     public void SetAction(ButtonUI.Button button, KeyCode key)
     {
-        //Debug.Log(button + " " + key);
+        InputManager.Instance.ClearButton(key);
+        UpdateSettings(button, key);
         switch (button)
         {
             case ButtonUI.Button.MoveUp:
-                InputManager.Instance.ClearButton(key);
-                if (settings.ContainsKey(ButtonUI.Button.MoveUp))
-                {
-                    InputManager.Instance.ClearButton(settings[ButtonUI.Button.MoveUp]);
-                    settings.Remove(ButtonUI.Button.MoveUp);
-                }
-                settings.Add(ButtonUI.Button.MoveUp, key);
                 InputManager.Instance.SubscribeToButton(MoveUp, key);
                 break;
 
             case ButtonUI.Button.MoveDown:
-                InputManager.Instance.ClearButton(key);
-                if (settings.ContainsKey(ButtonUI.Button.MoveDown))
-                {
-                    InputManager.Instance.ClearButton(settings[ButtonUI.Button.MoveDown]);
-                    settings.Remove(ButtonUI.Button.MoveDown);
-                }
-                settings.Add(ButtonUI.Button.MoveDown, key);
                 InputManager.Instance.SubscribeToButton(MoveDown, key);
                 break;
 
             case ButtonUI.Button.MoveLeft:
-                InputManager.Instance.ClearButton(key);
-                if (settings.ContainsKey(ButtonUI.Button.MoveLeft))
-                {
-                    InputManager.Instance.ClearButton(settings[ButtonUI.Button.MoveLeft]);
-                    settings.Remove(ButtonUI.Button.MoveLeft);
-                }
-                settings.Add(ButtonUI.Button.MoveLeft, key);
                 InputManager.Instance.SubscribeToButton(MoveLeft, key);
                 break;
 
             case ButtonUI.Button.MoveRight:
-                InputManager.Instance.ClearButton(key);
-                if (settings.ContainsKey(ButtonUI.Button.MoveRight))
-                {
-                    InputManager.Instance.ClearButton(settings[ButtonUI.Button.MoveRight]);
-                    settings.Remove(ButtonUI.Button.MoveRight);
-                }
-                settings.Add(ButtonUI.Button.MoveRight, key);
+                
                 InputManager.Instance.SubscribeToButton(MoveRight, key);
                 break;
         }

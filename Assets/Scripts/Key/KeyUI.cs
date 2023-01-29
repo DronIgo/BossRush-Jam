@@ -9,7 +9,7 @@ public class KeyUI : MonoBehaviour
     private DragAndDrop _dragAndDrop;
     private Vector3 _defaultPosition;
     private Animator _animator;
-    [SerializeField] private KeyCode _key; 
+    public KeyCode Key; 
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class KeyUI : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.SubscribeToButton(PressButtonAnimation, _key);
+        InputManager.Instance.SubscribeToButton(PressButtonAnimation, Key);
     }
 
     private void ResetPosition(PointerEventData data)
@@ -34,7 +34,7 @@ public class KeyUI : MonoBehaviour
     {
         ButtonUI buttonUI = buttonObj.GetComponent<ButtonUI>();
         ButtonUI.Button button = buttonUI.MyButton;
-        PlayerController.Instance.SetAction(button, _key);
+        PlayerController.Instance.SetAction(button, Key);
     }
 
     private void PressButtonAnimation()

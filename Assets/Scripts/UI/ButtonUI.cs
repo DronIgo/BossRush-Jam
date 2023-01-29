@@ -10,7 +10,8 @@ public class ButtonUI : MonoBehaviour
         MoveRight,
         MoveLeft,
         Attack,
-        Dash
+        Dash,
+        None
     }
 
     public Button MyButton;
