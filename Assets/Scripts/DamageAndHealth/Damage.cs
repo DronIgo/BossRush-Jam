@@ -6,6 +6,7 @@ using UnityEngine;
 public class Damage : MonoBehaviour
 {
     public float damageAmount;
+    [Tooltip("team обозначает команду, к которой относится урон, команда игрока - 0, боссов - 1")]
     public int team = 0;
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// KeyUIManager - класс синглтон, отвечающий за отображение UI элементов кнопок, метода типа UpdateUI, который бы самостоятельно полностью обновлял UI здесь нет,
+/// так что каждое отдельное обновлениевызывается из других методов
+/// </summary>
 public class KeyUIManager : MonoBehaviour
 {
     public static KeyUIManager Instance;
