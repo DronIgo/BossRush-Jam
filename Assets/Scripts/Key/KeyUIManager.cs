@@ -27,4 +27,16 @@ public class KeyUIManager : MonoBehaviour
         _keyUIs[key].transform.Find("Image").GetComponent<Image>().color = ButtonColors[b_index];
 
     }
+
+    public void DisableKey(KeyCode key)
+    {
+        InputManager.Instance.ClearButton(key);
+        _keyUIs[key].gameObject.SetActive(false);
+    }
+
+    public void EnableKey(KeyCode key)
+    {
+
+        _keyUIs[key].gameObject.SetActive(true);
+    }
 }
