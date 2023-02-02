@@ -2129,6 +2129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
+  invulnrable: 0
   health: 4
   OnDeathEvent:
     m_PersistentCalls:
@@ -2372,7 +2373,7 @@ GameObject:
   - component: {fileID: 919731129}
   - component: {fileID: 919731128}
   m_Layer: 0
-  m_Name: UIManagerr
+  m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2397,7 +2398,8 @@ MonoBehaviour:
   - {r: 0.9960785, g: 0.37647063, b: 0, a: 1}
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.056959715, g: 0.0641701, b: 0.9433962, a: 1}
-  Buttons: 000000000100000002000000030000000600000004000000
+  - {r: 1, g: 0, b: 0.97899675, a: 1}
+  Buttons: 00000000010000000200000003000000060000000400000005000000
 --- !u!4 &919731129
 Transform:
   m_ObjectHideFlags: 0
@@ -3088,6 +3090,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageAmount: 2
   team: 0
+  OnDamageEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!50 &1233574846
 Rigidbody2D:
   serializedVersion: 4
@@ -4641,7 +4646,9 @@ MonoBehaviour:
   attackCooldown: 0.8
   defaultSpeed: 3
   speedWhileAttacking: 0.5
+  dashSpeed: 5
   speed: 3
+  Direction: {x: 0, y: 0}
 --- !u!212 &1935862481
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4755,6 +4762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  invulnrable: 0
   health: 10
   OnDeathEvent:
     m_PersistentCalls:
