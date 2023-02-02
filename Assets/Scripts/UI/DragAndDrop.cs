@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 
+/// <summary>
+/// ќбщий скрипт дл€ перет€гиваемых элементов, на событи€ полагаетс€ подписыватьс€
+/// </summary>
 [RequireComponent(typeof(CanvasGroup))]
 public class DragAndDrop : MonoBehaviour, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {

@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
+    
     public enum State
     {
         Move,
@@ -12,46 +13,96 @@ public class PlayerController : MonoBehaviour
         Attack
     }
 
+    //State используется в первую очередь аниматором
     public State CurrentState;
 
+    //settings определяют какая кнопка назначена на каждое из действий
     public Dictionary<ButtonUI.Button, KeyCode> settings;
 
-    public float attackDuration = 0.8f;
+    public float attackDuration = 0.5f;
     public float dashDuration = 0.5f;
 
-    public float attackCooldown = 0.8f;
+    [Tooltip("время от момента завершения атаки до возможности атаковать снова")]
+    public float attackCooldown = 0.3f;
 
     public float defaultSpeed = 3.0f;
     public float speedWhileAttacking = 0.8f;
+    public float dashSpeed = 5.0f;
 
     public float speed = 3.0f;
 
+    private Health _myHealth;
 
+    private bool _actionAvialable = true;
     private bool _attackAvialable = true;
+
+    public Vector2 Direction = new Vector2(0, 0);
 
     private void MoveUp()
     {
+        if (!_actionAvialable) return;
+        Direction.y += 1;
         transform.position += new Vector3(0.0f, 1.0f, 0.0f) * Time.deltaTime * speed;
     }
     private void MoveDown()
     {
+        if (!_actionAvialable) return;
+        Direction.y -= 1;
         transform.position += new Vector3(0.0f, -1.0f, 0.0f) * Time.deltaTime * speed;
     }
     private void MoveRight()
     {
+        if (!_actionAvialable) return;
+        Direction.x += 1;
         transform.position += new Vector3(1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
     }
     private void MoveLeft()
     {
+        if (!_actionAvialable) return;
+        Direction.x -= 1;
         transform.position += new Vector3(-1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
     }
     private void Attack()
     {
+        if (!_actionAvialable) return;
         if (!_attackAvialable) return;
         speed = speedWhileAttacking;
         CurrentState = State.Attack;
         _attackAvialable = false;
         StartCoroutine(ResetAttack());
+    }
+
+    private void Dash()
+    {
+        if (!_actionAvialable) return;
+        StartCoroutine(DashCoroutine());
+    }
+
+    private Vector3 dashDirection = new Vector3(); 
+
+    IEnumerator DashCoroutine()
+    {
+        _actionAvialable = false;
+        _myHealth.invulnrable = true;
+        CurrentState = State.Roll;
+        dashDirection.x = Direction.normalized.x;
+        dashDirection.y = Direction.normalized.y;
+        float dashTime = 0;
+        while (dashTime < dashDuration)
+        {
+            transform.position += dashDirection * dashSpeed * Time.deltaTime;
+            dashTime += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        _myHealth.invulnrable = false;
+        CurrentState = State.Move;
+        _actionAvialable = true;
+    }
+
+    private void LateUpdate()
+    {
+        Direction.x = 0;
+        Direction.y = 0;
     }
 
     IEnumerator ResetAttack()
@@ -70,7 +121,7 @@ public class PlayerController : MonoBehaviour
         InputManager.Instance.SubscribeToButton(MoveLeft, KeyCode.A);
         InputManager.Instance.SubscribeToButton(MoveRight, KeyCode.D);
         InputManager.Instance.SubscribeToButton(Attack, KeyCode.R);
-
+        InputManager.Instance.SubscribeToButton(Dash, KeyCode.G);
         settings = new Dictionary<ButtonUI.Button, KeyCode>();
 
         UpdateSettings(ButtonUI.Button.MoveUp, KeyCode.W);
@@ -78,8 +129,11 @@ public class PlayerController : MonoBehaviour
         UpdateSettings(ButtonUI.Button.MoveLeft, KeyCode.A);
         UpdateSettings(ButtonUI.Button.MoveRight, KeyCode.D);
         UpdateSettings(ButtonUI.Button.Attack, KeyCode.R);
+        UpdateSettings(ButtonUI.Button.Dash, KeyCode.G);
+        _myHealth = GetComponent<Health>();
     }
 
+    //Добавляем соответствующую кнопку в настройки и меняем цвет кнопки
     private void UpdateSettings(ButtonUI.Button button, KeyCode key)
     {
         if (settings.ContainsKey(button))
@@ -92,6 +146,7 @@ public class PlayerController : MonoBehaviour
         KeyUIManager.Instance.UpdateButtonUI(key, button);
     }
 
+    //Назначение определеленной кнопки на действие происходит в этой функции
     public void SetAction(ButtonUI.Button button, KeyCode key)
     {
         InputManager.Instance.ClearButton(key);

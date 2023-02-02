@@ -19,6 +19,7 @@ public class PlayerAnimator : MonoBehaviour
 
     private void Update()
     {
+        // На данный момент чтобы определить направление движение не используется инпут вместо этого мы смотрим на разницу положений на предыдущем фрейме и текущем
         Vector3 velocity = (transform.position - _prevPosition);
         _prevPosition = transform.position;
         if (velocity.sqrMagnitude > 0)

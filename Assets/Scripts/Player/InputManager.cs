@@ -13,6 +13,7 @@ public class InputManager : MonoBehaviour
         KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V, KeyCode.B, KeyCode.N, KeyCode.M, KeyCode.Comma
     };
 
+    // Key - класс-обертка для события OnPressed, срабатывающего при нажатии кнопки за вызов этих событий и отвечает InputManager
     public Dictionary<KeyCode, Key> keysByCodes = new Dictionary<KeyCode, Key>();
 
     private void Awake()
@@ -35,6 +36,11 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Подписывает делегат на OnPressed event указанной кнопки
+    /// </summary>
+    /// <param name="func"></param>
+    /// <param name="key"></param>
     public void SubscribeToButton(Key.KeyHandler func, KeyCode key)
     {
         if (keysByCodes.ContainsKey(key))
@@ -47,6 +53,11 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Отписывает делегат от OnPressed eventа указанной кнопки (не рекомендуется)
+    /// </summary>
+    /// <param name="func"></param>
+    /// <param name="key"></param>
     public void UnsubscribeFromButton(Key.KeyHandler func, KeyCode key)
     {
         if (keysByCodes.ContainsKey(key))
@@ -55,6 +66,10 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// полностью отчищает OnPressed event указанной кнопки (рекомендуется)
+    /// </summary>
+    /// <param name="key"></param>
     public void ClearButton(KeyCode key)
     {
         if (keysByCodes.ContainsKey(key))
