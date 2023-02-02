@@ -22,4 +22,9 @@ public class Damage : MonoBehaviour
             }
         }
     }
+
+    public void Destroy()
+    {
+        Destroy(this.gameObject);
+    }
 }
