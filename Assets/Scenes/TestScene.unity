@@ -1275,6 +1275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 338253373}
   - component: {fileID: 338253372}
+  - component: {fileID: 338253374}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -1349,6 +1350,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &338253374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338253371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d90e2e49f6bb154e8eeb662c07f24b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shot: 0
+  projectile: {fileID: 0}
 --- !u!1 &340761159
 GameObject:
   m_ObjectHideFlags: 0
@@ -4910,9 +4925,12 @@ MonoBehaviour:
   attackCooldown: 0.8
   defaultSpeed: 3
   speedWhileAttacking: 0.5
+  speedWhileCharging: 1.6
   dashSpeed: 5
   speed: 3
+  chargeHoldDuration: 2
   Direction: {x: 0, y: 0}
+  charged: 0
 --- !u!212 &1935862481
 SpriteRenderer:
   m_ObjectHideFlags: 0
