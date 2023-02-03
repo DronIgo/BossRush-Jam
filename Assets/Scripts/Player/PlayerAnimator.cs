@@ -33,14 +33,22 @@ public class PlayerAnimator : MonoBehaviour
             case PlayerController.State.Move:
                 _animator.SetBool("dash", false);
                 _animator.SetBool("attack", false);
+                _animator.SetBool("charged_attack", false);
                 break;
             case PlayerController.State.Roll:
                 _animator.SetBool("dash", true);
                 _animator.SetBool("attack", false);
+                _animator.SetBool("charged_attack", false);
                 break;
             case PlayerController.State.Attack:
                 _animator.SetBool("dash", false);
                 _animator.SetBool("attack", true);
+                _animator.SetBool("charged_attack", false);
+                break;
+            case PlayerController.State.ChargedAttack:
+                _animator.SetBool("dash", false);
+                _animator.SetBool("attack", false);
+                _animator.SetBool("charged_attack", true);
                 break;
         }
     }

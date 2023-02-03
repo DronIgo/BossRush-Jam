@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
     {
         Move,
         Roll,
-        Attack
+        Attack,
+        ChargedAttack
     }
 
     //State используется в первую очередь аниматором
@@ -27,9 +28,12 @@ public class PlayerController : MonoBehaviour
 
     public float defaultSpeed = 3.0f;
     public float speedWhileAttacking = 0.8f;
+    public float speedWhileCharging = 1.6f;
     public float dashSpeed = 5.0f;
 
     public float speed = 3.0f;
+
+    public float chargeHoldDuration = 2.0f;
 
     private Health _myHealth;
 
@@ -62,16 +66,48 @@ public class PlayerController : MonoBehaviour
         Direction.x -= 1;
         transform.position += new Vector3(-1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
     }
+
+    private float _holdDuration = 0f;
+    private bool _heldAttackPrevFrame = false;
+    private bool _attackHeldThisFrame = false;
     private void Attack()
     {
-        if (!_actionAvialable) return;
-        if (!_attackAvialable) return;
-        speed = speedWhileAttacking;
-        CurrentState = State.Attack;
-        _attackAvialable = false;
-        StartCoroutine(ResetAttack());
+        _attackHeldThisFrame = true;
+        if (_heldAttackPrevFrame)
+        {
+            speed = speedWhileCharging;
+            _holdDuration += Time.deltaTime;
+        }
+        else
+        {
+            if (!_actionAvialable) return;
+            if (!_attackAvialable) return;
+            speed = speedWhileAttacking;
+            CurrentState = State.Attack;
+            _attackAvialable = false;
+            _heldAttackPrevFrame = true;
+            StartCoroutine(ResetAttack());
+        }
     }
 
+    private void ChargedAttack()
+    {
+        _holdDuration = 0;
+        speed = speedWhileAttacking;
+        CurrentState = State.ChargedAttack;
+        _attackAvialable = false;
+        Debug.Log("Charged attack");
+        StartCoroutine(ResetChargedAttack());
+    }
+
+    IEnumerator ResetChargedAttack()
+    {
+        yield return new WaitForSeconds(attackDuration);
+        speed = defaultSpeed;
+        CurrentState = State.Move;
+        yield return new WaitForSeconds(attackCooldown);
+        _attackAvialable = true;
+    }
     private void Dash()
     {
         if (!_actionAvialable) return;
@@ -99,10 +135,26 @@ public class PlayerController : MonoBehaviour
         _actionAvialable = true;
     }
 
+    public bool charged = false;
     private void LateUpdate()
     {
+        if (_holdDuration > chargeHoldDuration)
+        {
+            charged = true;
+        }
+        else
+            charged = false;
         Direction.x = 0;
         Direction.y = 0;
+        if (!_attackHeldThisFrame)
+        {
+            _heldAttackPrevFrame = false;
+            if (_holdDuration > chargeHoldDuration)
+            {
+                ChargedAttack();
+            }
+        }
+        _attackHeldThisFrame = false;
     }
 
     IEnumerator ResetAttack()
