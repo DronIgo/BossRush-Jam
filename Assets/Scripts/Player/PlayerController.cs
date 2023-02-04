@@ -29,7 +29,9 @@ public class PlayerController : MonoBehaviour
     public float defaultSpeed = 3.0f;
     public float speedWhileAttacking = 0.8f;
     public float speedWhileCharging = 1.6f;
-    public float dashSpeed = 5.0f;
+    //public float dashSpeed = 5.0f;
+    public float dashMultiplayer = 1.6f;
+
 
     public float speed = 3.0f;
 
@@ -40,31 +42,36 @@ public class PlayerController : MonoBehaviour
     private bool _actionAvialable = true;
     private bool _attackAvialable = true;
 
+    private Rigidbody2D _rigidbody2D = null;
+
     public Vector2 Direction = new Vector2(0, 0);
 
     private void MoveUp()
     {
         if (!_actionAvialable) return;
         Direction.y += 1;
-        transform.position += new Vector3(0.0f, 1.0f, 0.0f) * Time.deltaTime * speed;
+        //transform.position += new Vector3(0.0f, 1.0f, 0.0f) * Time.deltaTime * speed;
+        _rigidbody2D.position += new Vector2(0.0f, 1.0f) * Time.deltaTime * speed;
     }
     private void MoveDown()
     {
         if (!_actionAvialable) return;
         Direction.y -= 1;
-        transform.position += new Vector3(0.0f, -1.0f, 0.0f) * Time.deltaTime * speed;
+        //transform.position += new Vector3(0.0f, -1.0f, 0.0f) * Time.deltaTime * speed;
+        _rigidbody2D.position += new Vector2(0.0f, -1.0f) * Time.deltaTime * speed;
     }
     private void MoveRight()
     {
         if (!_actionAvialable) return;
         Direction.x += 1;
-        transform.position += new Vector3(1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
+        //transform.position += new Vector3(1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
+        _rigidbody2D.position += new Vector2(1.0f, 0.0f) * Time.deltaTime * speed;
     }
     private void MoveLeft()
     {
         if (!_actionAvialable) return;
         Direction.x -= 1;
-        transform.position += new Vector3(-1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
+        _rigidbody2D.position += new Vector2(-1.0f, 0.0f) * Time.deltaTime * speed;
     }
 
     private float _holdDuration = 0f;
@@ -118,6 +125,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DashCoroutine()
     {
+        float dashSpeed = speed * dashMultiplayer;
         _actionAvialable = false;
         _myHealth.invulnrable = true;
         CurrentState = State.Roll;
@@ -126,7 +134,7 @@ public class PlayerController : MonoBehaviour
         float dashTime = 0;
         while (dashTime < dashDuration)
         {
-            transform.position += dashDirection * dashSpeed * Time.deltaTime;
+            _rigidbody2D.position += (Vector2)dashDirection * dashSpeed * Time.deltaTime;
             dashTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
@@ -167,6 +175,8 @@ public class PlayerController : MonoBehaviour
     }
     private void Awake()
     {
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+
         Instance = this;
         InputManager.Instance.SubscribeToButton(MoveUp, KeyCode.W);
         InputManager.Instance.SubscribeToButton(MoveDown, KeyCode.S);
@@ -184,7 +194,7 @@ public class PlayerController : MonoBehaviour
         UpdateSettings(ButtonUI.Button.Dash, KeyCode.G);
         _myHealth = GetComponent<Health>();
     }
-
+    
     //Добавляем соответствующую кнопку в настройки и меняем цвет кнопки
     private void UpdateSettings(ButtonUI.Button button, KeyCode key)
     {
