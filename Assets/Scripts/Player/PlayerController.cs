@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("время от момента завершения атаки до возможности атаковать снова")]
     public float attackCooldown = 0.3f;
+    public float dashCooldown = 0.3f;
 
     public float defaultSpeed = 3.0f;
     public float speedWhileAttacking = 0.8f;
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
     private Health _myHealth;
 
     private bool _actionAvialable = true;
+    private bool _dashAvialable = true;
     private bool _attackAvialable = true;
 
     private Rigidbody2D _rigidbody2D = null;
@@ -120,6 +122,7 @@ public class PlayerController : MonoBehaviour
     private void Dash()
     {
         if (!_actionAvialable) return;
+        if (!_dashAvialable) return;
         StartCoroutine(DashCoroutine());
     }
 
@@ -127,6 +130,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DashCoroutine()
     {
+        _dashAvialable = false;
         float dashSpeed = speed * dashMultiplayer;
         _actionAvialable = false;
         _myHealth.invulnrable = true;
@@ -143,6 +147,8 @@ public class PlayerController : MonoBehaviour
         _myHealth.invulnrable = false;
         CurrentState = State.Move;
         _actionAvialable = true;
+        yield return new WaitForSeconds(dashCooldown);
+        _dashAvialable = true;
     }
 
     public bool charged = false;

@@ -9,6 +9,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _tutorialText;
     [SerializeField] private GameObject _puppet;
     [SerializeField] private GameObject _dragon;
+    [SerializeField] private GameObject _damageWall;
     private bool[] triggers = new bool[] { false, false, false };
     public void SetTrigger(int index)
     {
@@ -41,6 +42,10 @@ public class TutorialManager : MonoBehaviour
         _dragon.SetActive(true);
         yield return new WaitUntil(() => triggers[1]);
         _tutorialText.text = "Press purple key to use dash which gives you invincibility";
-
+        _damageWall.SetActive(true);
+        _puppet.GetComponent<Health>().RestoreHealth(2);
+        _puppet.SetActive(true);
+        triggers[0] = false;
+        yield return new WaitUntil(() => triggers[0]);
     }
 }
