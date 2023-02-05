@@ -41,7 +41,8 @@ public class KeyUIManager : MonoBehaviour
     public void DisableKey(KeyCode key)
     {
         InputManager.Instance.ClearButton(key);
-        _keyUIs[key].gameObject.SetActive(false);
+        //_keyUIs[key].gameObject.SetActive(false);
+        _keyUIs[key].Destroy();
         DeletedButtons.Add(key);
         avialableButtons.Remove(key);
     }
@@ -50,7 +51,8 @@ public class KeyUIManager : MonoBehaviour
     {
         DeletedButtons.Remove(key);
         avialableButtons.Add(key);
-        _keyUIs[key].gameObject.SetActive(true);
+        //_keyUIs[key].gameObject.SetActive(true);
+        _keyUIs[key].Revive();
     }
 
     public void EnableKey()

@@ -10,7 +10,7 @@ public class Key
 {
     public delegate void KeyHandler();
     public event KeyHandler OnPressed;
-
+    public event KeyHandler OnPressedAnimation;
     public void ClearEvent()
     {
         if (OnPressed == null)
@@ -25,5 +25,7 @@ public class Key
     {
         if (OnPressed != null)
             OnPressed.Invoke();
+        if (OnPressedAnimation != null)
+            OnPressedAnimation.Invoke();
     }
 }

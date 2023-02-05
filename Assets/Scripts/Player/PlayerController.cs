@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(attackCooldown);
         _attackAvialable = true;
     }
-    private void Awake()
+    private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
 

@@ -55,6 +55,19 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public void SubscribeToButtonAnimation(Key.KeyHandler func, KeyCode key)
+    {
+        if (keysByCodes.ContainsKey(key))
+        {
+            keysByCodes[key].OnPressedAnimation += func;
+        }
+        else
+        {
+            keysByCodes.Add(key, new Key());
+            keysByCodes[key].OnPressedAnimation += func;
+        }
+    }
+
     /// <summary>
     /// Отписывает делегат от OnPressed eventа указанной кнопки (не рекомендуется)
     /// </summary>
