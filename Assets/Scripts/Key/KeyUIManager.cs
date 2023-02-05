@@ -14,13 +14,18 @@ public class KeyUIManager : MonoBehaviour
     public List<Color> ButtonColors = new List<Color>();
     public List<ButtonUI.Button> Buttons = new List<ButtonUI.Button>() { ButtonUI.Button.MoveUp, ButtonUI.Button.MoveDown, ButtonUI.Button.MoveRight, ButtonUI.Button.MoveLeft, ButtonUI.Button.None};
 
+
+
+    public List<KeyCode> avialableButtons = new List<KeyCode>();
     public List<KeyCode> DeletedButtons = new List<KeyCode>();
     private void Awake()
     {
         Instance = this;
+        
         var allKeyUIs = FindObjectsOfType<KeyUI>();
         foreach (var key in allKeyUIs)
         {
+            avialableButtons.Add(key.Key);
             _keyUIs.Add(key.Key, key);
         }
     }
@@ -38,11 +43,55 @@ public class KeyUIManager : MonoBehaviour
         InputManager.Instance.ClearButton(key);
         _keyUIs[key].gameObject.SetActive(false);
         DeletedButtons.Add(key);
+        avialableButtons.Remove(key);
     }
 
     public void EnableKey(KeyCode key)
     {
         DeletedButtons.Remove(key);
+        avialableButtons.Add(key);
         _keyUIs[key].gameObject.SetActive(true);
+    }
+
+    public void EnableKey()
+    {
+        int r = Random.Range(0, DeletedButtons.Count);
+        var key = DeletedButtons[r];
+        EnableKey(key);
+    }
+
+    public void DestroyButtons(int amount)
+    {
+        int done = 0;
+        List<KeyCode> avialableForDeletion = new List<KeyCode>();
+        foreach (var key in avialableButtons)
+        {
+            if (!PlayerController.Instance.settings.ContainsValue(key))
+            {
+                avialableForDeletion.Add(key);
+            }
+        }
+        if (avialableForDeletion.Count <= amount)
+        {
+            amount -= avialableForDeletion.Count;
+            foreach (var key in avialableForDeletion)
+            {
+                DisableKey(key);
+            }
+            avialableForDeletion = new List<KeyCode>();
+            foreach (var key in avialableButtons)
+            {
+                if (PlayerController.Instance.settings.ContainsValue(key))
+                {
+                    avialableForDeletion.Add(key);
+                }
+            }
+        }
+        for (int i = 0; i < amount; ++i)
+        {
+            int r = Random.Range(0, avialableForDeletion.Count);
+            DisableKey(avialableForDeletion[r]);
+            avialableForDeletion.RemoveAt(r);
+        }
     }
 }

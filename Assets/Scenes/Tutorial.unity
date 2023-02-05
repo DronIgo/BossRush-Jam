@@ -1019,6 +1019,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 82649670}
+--- !u!114 &1065207670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1011346912175679332, guid: 6147832b33007c54ca04d9118bea242e, type: 3}
+  m_PrefabInstance: {fileID: 1607767081}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8bf82069e7025942b6374d9608d9674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1077273976
 GameObject:
   m_ObjectHideFlags: 0
@@ -1751,6 +1762,38 @@ PrefabInstance:
     - target: {fileID: 2545553147409652272, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1065207670}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DestroyButtons
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: KeyUIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}

@@ -6,8 +6,6 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
     
-
-
     public enum State
     {
         Move,
@@ -241,11 +239,5 @@ public class PlayerController : MonoBehaviour
                 InputManager.Instance.SubscribeToButton(MoveRight, key);
                 break;
         }
-    }
-
-
-    public void DestroyButtons(int amount)
-    {
-        
     }
 }
