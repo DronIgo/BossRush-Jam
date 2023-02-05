@@ -13,6 +13,8 @@ public class KeyUIManager : MonoBehaviour
     private Dictionary<KeyCode, KeyUI> _keyUIs = new Dictionary<KeyCode, KeyUI>();
     public List<Color> ButtonColors = new List<Color>();
     public List<ButtonUI.Button> Buttons = new List<ButtonUI.Button>() { ButtonUI.Button.MoveUp, ButtonUI.Button.MoveDown, ButtonUI.Button.MoveRight, ButtonUI.Button.MoveLeft, ButtonUI.Button.None};
+
+    public List<KeyCode> DeletedButtons = new List<KeyCode>();
     private void Awake()
     {
         Instance = this;
@@ -26,7 +28,6 @@ public class KeyUIManager : MonoBehaviour
     public void UpdateButtonUI(KeyCode key, ButtonUI.Button button)
     {
         int b_index = Buttons.FindIndex((x) => x == button);
-        Debug.Log(b_index);
         _keyUIs[key].gameObject.GetComponent<Image>().color = ButtonColors[b_index];
         _keyUIs[key].transform.Find("Image").GetComponent<Image>().color = ButtonColors[b_index];
 
@@ -36,11 +37,12 @@ public class KeyUIManager : MonoBehaviour
     {
         InputManager.Instance.ClearButton(key);
         _keyUIs[key].gameObject.SetActive(false);
+        DeletedButtons.Add(key);
     }
 
     public void EnableKey(KeyCode key)
     {
-
+        DeletedButtons.Remove(key);
         _keyUIs[key].gameObject.SetActive(true);
     }
 }
