@@ -7,49 +7,95 @@ public class PlayerAnimator : MonoBehaviour
 {
     private PlayerController _controller;
     private Animator _animator;
+    private Animator _crossAnimator;
 
     private Vector3 _prevPosition;
 
-    private void Awake()
+    private void Start()
     {
         _prevPosition = transform.position;
         _animator = GetComponent<Animator>();
+        _crossAnimator = transform.Find("Cross").GetComponent<Animator>();
         _controller = GetComponent<PlayerController>();
+        SetAnimationsSpeed();
     }
+
+    private float dashAnimatorSpeed = 1f;
+    private float moveAnimatorSpeed = 1f;
+    private float attackAnimatorSpeed = 1f;
+    private float defaultAnimatorSpeed = 1f;
+
+    Vector2 _lastNotZeroDirection = new Vector2(0, 0);
 
     private void Update()
     {
-        // На данный момент чтобы определить направление движение не используется инпут вместо этого мы смотрим на разницу положений на предыдущем фрейме и текущем
         Vector2 velocity = _controller.Direction;
+        if (velocity.x != 0 || velocity.y != 0)
+            _lastNotZeroDirection = velocity;
         _prevPosition = transform.position;
         if (velocity.sqrMagnitude > 0)
             velocity = velocity.normalized;
-        PlayerController.State state = _controller.CurrentState;
+        PlayerController.State moveState = _controller.MovementState;
+        PlayerController.State crossState = _controller.CrossState;
         _animator.SetFloat("x_speed", velocity.x);
         _animator.SetFloat("y_speed", velocity.y);
+        _crossAnimator.SetFloat("x_speed", velocity.x);
+        _crossAnimator.SetFloat("y_speed", velocity.y);
         _animator.SetFloat("speed", velocity.x * velocity.x + velocity.y * velocity.y);
-        switch (state)
+        _animator.SetFloat("x_direction", _lastNotZeroDirection.x);
+        _animator.SetFloat("y_direction", _lastNotZeroDirection.y);
+        switch (moveState)
         {
             case PlayerController.State.Move:
                 _animator.SetBool("dash", false);
-                _animator.SetBool("attack", false);
-                _animator.SetBool("charged_attack", false);
+                _animator.speed = moveAnimatorSpeed;
                 break;
             case PlayerController.State.Roll:
                 _animator.SetBool("dash", true);
-                _animator.SetBool("attack", false);
-                _animator.SetBool("charged_attack", false);
+                _animator.speed = dashAnimatorSpeed;
+                break;
+        }
+
+        switch(crossState)
+        {
+            case PlayerController.State.Move:
+                _crossAnimator.SetBool("attack", false);
+                _crossAnimator.SetBool("charged_attack", false);
+                _crossAnimator.speed = defaultAnimatorSpeed;
                 break;
             case PlayerController.State.Attack:
-                _animator.SetBool("dash", false);
-                _animator.SetBool("attack", true);
-                _animator.SetBool("charged_attack", false);
+                _crossAnimator.SetBool("attack", true);
+                _crossAnimator.SetBool("charged_attack", false);
+                _crossAnimator.speed = attackAnimatorSpeed;
                 break;
             case PlayerController.State.ChargedAttack:
-                _animator.SetBool("dash", false);
-                _animator.SetBool("attack", false);
-                _animator.SetBool("charged_attack", true);
+                _crossAnimator.SetBool("attack", false);
+                _crossAnimator.SetBool("charged_attack", true);
+                _crossAnimator.speed = attackAnimatorSpeed;
                 break;
+        }
+    }
+
+
+    private void SetAnimationsSpeed()
+    {
+        AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
+        foreach (AnimationClip clip in clips)
+        {
+            if (clip.name == "Roll")
+            {
+                float duration = clip.length;
+                dashAnimatorSpeed = duration/PlayerController.Instance.dashDuration;
+            }
+        }
+        clips = _crossAnimator.runtimeAnimatorController.animationClips;
+        foreach (AnimationClip clip in clips)
+        {
+            if (clip.name == "Attack")
+            {
+                float duration = clip.length;
+                attackAnimatorSpeed = duration / PlayerController.Instance.attackDuration - 0.08f;
+            }
         }
     }
 }

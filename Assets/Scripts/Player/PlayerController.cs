@@ -15,7 +15,8 @@ public class PlayerController : MonoBehaviour
     }
 
     //State используется в первую очередь аниматором
-    public State CurrentState;
+    public State MovementState;
+    public State CrossState;
 
     //settings определяют какая кнопка назначена на каждое из действий
     public Dictionary<ButtonUI.Button, KeyCode> settings;
@@ -53,27 +54,27 @@ public class PlayerController : MonoBehaviour
         if (!_actionAvialable) return;
         Direction.y += 1;
         //transform.position += new Vector3(0.0f, 1.0f, 0.0f) * Time.deltaTime * speed;
-        _rigidbody2D.position += new Vector2(0.0f, 1.0f) * Time.deltaTime * speed;
+        //_rigidbody2D.position += new Vector2(0.0f, 1.0f) * Time.deltaTime * speed;
     }
     private void MoveDown()
     {
         if (!_actionAvialable) return;
         Direction.y -= 1;
         //transform.position += new Vector3(0.0f, -1.0f, 0.0f) * Time.deltaTime * speed;
-        _rigidbody2D.position += new Vector2(0.0f, -1.0f) * Time.deltaTime * speed;
+        //_rigidbody2D.position += new Vector2(0.0f, -1.0f) * Time.deltaTime * speed;
     }
     private void MoveRight()
     {
         if (!_actionAvialable) return;
         Direction.x += 1;
         //transform.position += new Vector3(1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
-        _rigidbody2D.position += new Vector2(1.0f, 0.0f) * Time.deltaTime * speed;
+        //_rigidbody2D.position += new Vector2(1.0f, 0.0f) * Time.deltaTime * speed;
     }
     private void MoveLeft()
     {
         if (!_actionAvialable) return;
         Direction.x -= 1;
-        _rigidbody2D.position += new Vector2(-1.0f, 0.0f) * Time.deltaTime * speed;
+        //_rigidbody2D.position += new Vector2(-1.0f, 0.0f) * Time.deltaTime * speed;
     }
 
     private float _holdDuration = 0f;
@@ -92,20 +93,27 @@ public class PlayerController : MonoBehaviour
             if (!_actionAvialable) return;
             if (!_attackAvialable) return;
             speed = speedWhileAttacking;
-            CurrentState = State.Attack;
+            CrossState = State.Attack;
             _attackAvialable = false;
             _heldAttackPrevFrame = true;
             StartCoroutine(ResetAttack());
         }
+    }
+    IEnumerator ResetAttack()
+    {
+        yield return new WaitForSeconds(attackDuration);
+        speed = defaultSpeed;
+        CrossState = State.Move;
+        yield return new WaitForSeconds(attackCooldown);
+        _attackAvialable = true;
     }
 
     private void ChargedAttack()
     {
         _holdDuration = 0;
         speed = speedWhileAttacking;
-        CurrentState = State.ChargedAttack;
+        CrossState = State.ChargedAttack;
         _attackAvialable = false;
-        Debug.Log("Charged attack");
         StartCoroutine(ResetChargedAttack());
     }
 
@@ -113,7 +121,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(attackDuration);
         speed = defaultSpeed;
-        CurrentState = State.Move;
+        CrossState = State.Move;
         yield return new WaitForSeconds(attackCooldown);
         _attackAvialable = true;
     }
@@ -132,7 +140,7 @@ public class PlayerController : MonoBehaviour
         float dashSpeed = speed * dashMultiplayer;
         _actionAvialable = false;
         _myHealth.invulnrable = true;
-        CurrentState = State.Roll;
+        MovementState = State.Roll;
         dashDirection.x = Direction.normalized.x;
         dashDirection.y = Direction.normalized.y;
         float dashTime = 0;
@@ -143,7 +151,7 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         _myHealth.invulnrable = false;
-        CurrentState = State.Move;
+        MovementState = State.Move;
         _actionAvialable = true;
         yield return new WaitForSeconds(dashCooldown);
         _dashAvialable = true;
@@ -158,6 +166,7 @@ public class PlayerController : MonoBehaviour
         }
         else
             charged = false;
+        _rigidbody2D.position += Direction.normalized * Time.deltaTime * speed;
         Direction.x = 0;
         Direction.y = 0;
         if (!_attackHeldThisFrame)
@@ -171,19 +180,14 @@ public class PlayerController : MonoBehaviour
         _attackHeldThisFrame = false;
     }
 
-    IEnumerator ResetAttack()
+    private void Awake()
     {
-        yield return new WaitForSeconds(attackDuration);
-        speed = defaultSpeed;
-        CurrentState = State.Move;
-        yield return new WaitForSeconds(attackCooldown);
-        _attackAvialable = true;
+        Instance = this;
     }
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
-        Instance = this;
         InputManager.Instance.SubscribeToButton(MoveUp, KeyCode.W);
         InputManager.Instance.SubscribeToButton(MoveDown, KeyCode.S);
         InputManager.Instance.SubscribeToButton(MoveLeft, KeyCode.A);
@@ -210,6 +214,13 @@ public class PlayerController : MonoBehaviour
             InputManager.Instance.ClearButton(settings[button]);
             settings.Remove(button);
         }
+        //
+        //
+        //
+        //секретная строка, которая выключает мультикнопочность
+      ////// 
+       ////
+        //
         settings.Add(button, key);
         KeyUIManager.Instance.UpdateButtonUI(key, button);
     }
