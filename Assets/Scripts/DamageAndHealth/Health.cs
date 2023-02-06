@@ -14,7 +14,6 @@ public class Health : MonoBehaviour
     public void TakeDamage(float amount)
     {
         health -= amount;
-        Debug.Log(amount);
         if (OnDamageTaken != null)
         {
             OnDamageTaken.Invoke();
@@ -29,9 +28,9 @@ public class Health : MonoBehaviour
         }
     }
 
-    public void RestoreHealth(float amount)
+    public void RestoreHealth(float amount, bool checkhealth = true)
     {
-        if (health > 0)
+        if (health > 0 || !checkhealth)
             health = amount;
     }
 }

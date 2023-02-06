@@ -214,6 +214,17 @@ public class PlayerController : MonoBehaviour
             InputManager.Instance.ClearButton(settings[button]);
             settings.Remove(button);
         }
+        if (settings.ContainsValue(key))
+        {
+            foreach (var k in settings.Keys)
+            {
+                if (settings[k] == key)
+                {
+                    settings.Remove(k);
+                    break;
+                }
+            }
+        }
         //
         //
         //

@@ -33,7 +33,7 @@ public class KeyUIManager : MonoBehaviour
     public void UpdateButtonUI(KeyCode key, ButtonUI.Button button)
     {
         int b_index = Buttons.FindIndex((x) => x == button);
-        _keyUIs[key].gameObject.GetComponent<Image>().color = ButtonColors[b_index];
+        _keyUIs[key].gameObject.GetComponent<Image>().color = new Color(ButtonColors[b_index].r, ButtonColors[b_index].g, ButtonColors[b_index].b, _keyUIs[key].gameObject.GetComponent<Image>().color.a);
         _keyUIs[key].transform.Find("Image").GetComponent<Image>().color = ButtonColors[b_index];
 
     }
