@@ -40,7 +40,6 @@ public class KeyUIManager : MonoBehaviour
 
     public void DisableKey(KeyCode key)
     {
-        InputManager.Instance.ClearButton(key);
         //_keyUIs[key].gameObject.SetActive(false);
         _keyUIs[key].Destroy();
         DeletedButtons.Add(key);

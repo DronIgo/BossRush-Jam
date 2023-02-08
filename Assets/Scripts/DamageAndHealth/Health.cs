@@ -7,6 +7,7 @@ public class Health : MonoBehaviour
 {
     [Tooltip("team обозначает команду, к которой относится урон, команда игрока - 0, боссов - 1")]
     public int team = 0;
+    public float invulnDuration = 0f;
     public bool invulnrable = false;
     public float health = 10f;
     public UnityEvent OnDeathEvent = null;
@@ -26,6 +27,20 @@ public class Health : MonoBehaviour
                 OnDeathEvent.Invoke();
             }
         }
+    }
+
+    public bool invulnrableDamage = false;
+
+    public void BecomeInvulnFromDamage()
+    {
+        invulnrableDamage = true;
+        StartCoroutine(ResetInvuln());
+    }
+
+    IEnumerator ResetInvuln()
+    {
+        yield return new WaitForSeconds(invulnDuration);
+        invulnrableDamage = false;
     }
 
     public void RestoreHealth(float amount, bool checkhealth = true)

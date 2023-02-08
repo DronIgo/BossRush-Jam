@@ -64,6 +64,7 @@ public class KeyUI : MonoBehaviour
         _myImagesImage.color = new Color(1, 1, 1, 0.5f);
         _imageAnimator.SetBool("breaking", false);
         _dragAndDrop.enabled = false;
+        InputManager.Instance.ClearButton(Key);
     }
 
     public void Revive()

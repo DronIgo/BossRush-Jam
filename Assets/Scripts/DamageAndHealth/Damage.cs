@@ -15,7 +15,19 @@ public class Damage : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent<Health>(out Health health))
         {
-            if (health.team != team && !health.invulnrable)
+            if (health.team != team && !health.invulnrable && !health.invulnrableDamage)
+            {
+                health.TakeDamage(damageAmount);
+                OnDamageEvent.Invoke();
+            }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.TryGetComponent<Health>(out Health health))
+        {
+            if (health.team != team && !health.invulnrable && !health.invulnrableDamage)
             {
                 health.TakeDamage(damageAmount);
                 OnDamageEvent.Invoke();

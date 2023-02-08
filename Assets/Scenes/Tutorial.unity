@@ -128,6 +128,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2545553147409652269, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
   m_PrefabInstance: {fileID: 1472676332}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &82649672 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+  m_PrefabInstance: {fileID: 1472676332}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82649670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe70300d448a10d4cb2002340fb6f0ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &148606406
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,6 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
+  invulnDuration: 0
   invulnrable: 0
   health: 10
   OnDeathEvent:
@@ -358,6 +370,7 @@ MonoBehaviour:
   OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
+  invulnrableDamage: 0
 --- !u!1 &311475327
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +428,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -3
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.5279487, g: 0.5660378, b: 0.11427554, a: 1}
   m_FlipX: 0
@@ -584,23 +597,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 138490807, guid: 16843eb96ed1fd14b98d56a4a55138fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 190478303, guid: 16843eb96ed1fd14b98d56a4a55138fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 333167926, guid: 16843eb96ed1fd14b98d56a4a55138fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 689233893, guid: 16843eb96ed1fd14b98d56a4a55138fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1664394075, guid: 16843eb96ed1fd14b98d56a4a55138fc, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7854409425585311379, guid: 16843eb96ed1fd14b98d56a4a55138fc, type: 3}
       propertyPath: m_Pivot.x
@@ -1228,7 +1241,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.5279487, g: 0.5660378, b: 0.11427554, a: 1}
   m_FlipX: 0
@@ -1413,6 +1426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
+  invulnDuration: 0
   invulnrable: 0
   health: 3
   OnDeathEvent:
@@ -1457,6 +1471,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  invulnrableDamage: 0
 --- !u!1 &1084115916
 GameObject:
   m_ObjectHideFlags: 0
@@ -1529,7 +1544,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: f9240c98f3171464bbe011145a0d6d02, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1773,6 +1788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
+  invulnDuration: 0
   invulnrable: 0
   health: 2
   OnDeathEvent:
@@ -1805,6 +1821,7 @@ MonoBehaviour:
   OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
+  invulnrableDamage: 0
 --- !u!70 &1219940492
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -1855,6 +1872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
+  invulnDuration: 0
   invulnrable: 0
   health: 3
   OnDeathEvent:
@@ -1911,6 +1929,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  invulnrableDamage: 0
 --- !u!50 &1417187100
 Rigidbody2D:
   serializedVersion: 4
@@ -2047,10 +2066,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1560906436, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 2545553147409652269, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2099,14 +2114,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2545553147409652275, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
-      propertyPath: m_SortingOrder
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: invulnDuration
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
       propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1065207670}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 82649672}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: BecomeInvulnFromDamage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Health, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2545553147409652279, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
+      propertyPath: OnDamageTaken.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5040e145ed0750a43b0f919c11b336b0, type: 3}
 --- !u!1001 &1607767081
@@ -2662,6 +2705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 1
+  invulnDuration: 0
   invulnrable: 0
   health: 2
   OnDeathEvent:
@@ -2706,6 +2750,7 @@ MonoBehaviour:
   OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
+  invulnrableDamage: 0
 --- !u!212 &2123805764
 SpriteRenderer:
   m_ObjectHideFlags: 0
