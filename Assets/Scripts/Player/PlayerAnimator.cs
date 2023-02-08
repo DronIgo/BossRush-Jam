@@ -8,7 +8,7 @@ public class PlayerAnimator : MonoBehaviour
     private PlayerController _controller;
     private Animator _animator;
     private Animator _crossAnimator;
-
+    private GameObject _chargedIndicator;
     private Vector3 _prevPosition;
 
     private void Start()
@@ -18,6 +18,7 @@ public class PlayerAnimator : MonoBehaviour
         _crossAnimator = transform.Find("Cross").GetComponent<Animator>();
         _controller = GetComponent<PlayerController>();
         SetAnimationsSpeed();
+        _chargedIndicator = transform.Find("Indicator").gameObject;
     }
 
     private float dashAnimatorSpeed = 1f;
@@ -74,6 +75,8 @@ public class PlayerAnimator : MonoBehaviour
                 _crossAnimator.speed = attackAnimatorSpeed;
                 break;
         }
+
+        _chargedIndicator.SetActive(_controller.charged);
     }
 
 
