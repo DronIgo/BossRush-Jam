@@ -11,6 +11,8 @@ public class ChaseThePlayer : MonoBehaviour
 
     private void Start()
     {
+        if (_player == null)
+            _player = GameObject.Find("Player");
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 

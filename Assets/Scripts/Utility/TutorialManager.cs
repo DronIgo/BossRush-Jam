@@ -11,9 +11,13 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject _dragon;
     [SerializeField] private GameObject _puppetEnemy;
     [SerializeField] private GameObject _dragonEnemy;
+    [SerializeField] private GameObject _summonEffect;
     [SerializeField] private GameObject _damageWall;
     [SerializeField] private GameObject _garantedDamageWall;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _damageWallAnimator;
+    [SerializeField] private Animator _damageWallSelfAnimator;
+    [SerializeField] private GameObject _pickUp;
 
     private Health _health;
     private bool[] triggers = new bool[] { false, false, false };
@@ -60,6 +64,9 @@ public class TutorialManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         _garantedDamageWall.SetActive(true);
         yield return new WaitForSeconds(2f);
+        _tutorialText.text = "You can sometimes find extra buttons laying on the ground, make sure to pick them up";
+        _pickUp.SetActive(true);
+        yield return new WaitUntil(() => triggers[2]);
         _tutorialText.text = "Now...";
         _animator.SetBool("boss", true);
         yield return new WaitForSeconds(1f);
@@ -70,6 +77,20 @@ public class TutorialManager : MonoBehaviour
     IEnumerator BossPhase()
     {
         int wave = 0;
+        while (_health.health > 10)
+        {
+            wave++;
+            triggers[0] = false;
+            triggers[1] = false;
+            Vector3 dragonPos = GetRandomPosition();
+            Vector3 puppetPos = GetRandomPosition();
+            var dragon = Instantiate(_summonEffect, dragonPos, Quaternion.identity);
+            var puppet = Instantiate(_summonEffect, puppetPos, Quaternion.identity);
+            dragon.GetComponent<SummonAfter>().toSummon = _dragonEnemy;
+            puppet.GetComponent<SummonAfter>().toSummon = _puppetEnemy;
+            yield return new WaitUntil(() => triggers[0] && triggers[1]);
+            _health.TakeDamage(1f);
+        }
         while (_health.health > 0)
         {
             wave++;
@@ -77,13 +98,32 @@ public class TutorialManager : MonoBehaviour
             triggers[1] = false;
             Vector3 dragonPos = GetRandomPosition();
             Vector3 puppetPos = GetRandomPosition();
-            _dragonEnemy.transform.position = dragonPos;
-            _puppetEnemy.transform.position = puppetPos;
-            _dragonEnemy.GetComponent<Health>().RestoreHealth(3f, false);
-            _puppetEnemy.GetComponent<Health>().RestoreHealth(2f, false);
-            _dragonEnemy.SetActive(true);
-            _puppetEnemy.SetActive(true);
+            var dragon = Instantiate(_summonEffect, dragonPos, Quaternion.identity);
+            var puppet = Instantiate(_summonEffect, puppetPos, Quaternion.identity);
+            dragon.GetComponent<SummonAfter>().toSummon = _dragonEnemy;
+            puppet.GetComponent<SummonAfter>().toSummon = _puppetEnemy;
+            _damageWall.SetActive(true);
+            _damageWallSelfAnimator.SetTrigger("no_damage");
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                    _damageWallAnimator.SetBool("spin", true);
+                    _damageWallAnimator.SetBool("up_down", false);
+                    _damageWallAnimator.SetBool("left_right", false);
+                    break;
+                case 1:
+                    _damageWallAnimator.SetBool("spin", false);
+                    _damageWallAnimator.SetBool("up_down", true);
+                    _damageWallAnimator.SetBool("left_right", false);
+                    break;
+                case 2:
+                    _damageWallAnimator.SetBool("spin", false);
+                    _damageWallAnimator.SetBool("up_down", false);
+                    _damageWallAnimator.SetBool("left_right", true);
+                    break;
+            }
             yield return new WaitUntil(() => triggers[0] && triggers[1]);
+            _health.TakeDamage(1f);
         }
     }
 

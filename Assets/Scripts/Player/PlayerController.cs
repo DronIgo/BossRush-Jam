@@ -53,28 +53,21 @@ public class PlayerController : MonoBehaviour
     {
         if (!_actionAvialable) return;
         Direction.y += 1;
-        //transform.position += new Vector3(0.0f, 1.0f, 0.0f) * Time.deltaTime * speed;
-        //_rigidbody2D.position += new Vector2(0.0f, 1.0f) * Time.deltaTime * speed;
     }
     private void MoveDown()
     {
         if (!_actionAvialable) return;
         Direction.y -= 1;
-        //transform.position += new Vector3(0.0f, -1.0f, 0.0f) * Time.deltaTime * speed;
-        //_rigidbody2D.position += new Vector2(0.0f, -1.0f) * Time.deltaTime * speed;
     }
     private void MoveRight()
     {
         if (!_actionAvialable) return;
         Direction.x += 1;
-        //transform.position += new Vector3(1.0f, 0.0f, 0.0f) * Time.deltaTime * speed;
-        //_rigidbody2D.position += new Vector2(1.0f, 0.0f) * Time.deltaTime * speed;
     }
     private void MoveLeft()
     {
         if (!_actionAvialable) return;
         Direction.x -= 1;
-        //_rigidbody2D.position += new Vector2(-1.0f, 0.0f) * Time.deltaTime * speed;
     }
 
     private float _holdDuration = 0f;
@@ -132,17 +125,15 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(DashCoroutine());
     }
 
-    private Vector3 dashDirection = new Vector3(); 
-
+    private Vector3 dashDirection = new Vector3();
+    private bool updateDashDirection = false;
     IEnumerator DashCoroutine()
     {
+        updateDashDirection = true;
         _dashAvialable = false;
         float dashSpeed = speed * dashMultiplayer;
-        _actionAvialable = false;
         _myHealth.invulnrable = true;
         MovementState = State.Roll;
-        dashDirection.x = Direction.normalized.x;
-        dashDirection.y = Direction.normalized.y;
         float dashTime = 0;
         while (dashTime < dashDuration)
         {
@@ -167,6 +158,13 @@ public class PlayerController : MonoBehaviour
         else
             charged = false;
         _rigidbody2D.position += Direction.normalized * Time.deltaTime * speed;
+        if (updateDashDirection)
+        {
+            dashDirection.x = Direction.normalized.x;
+            dashDirection.y = Direction.normalized.y;
+            updateDashDirection = false;
+            _actionAvialable = false;
+        }
         Direction.x = 0;
         Direction.y = 0;
         if (!_attackHeldThisFrame)

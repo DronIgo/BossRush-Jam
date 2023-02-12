@@ -43,9 +43,19 @@ public class Health : MonoBehaviour
         invulnrableDamage = false;
     }
 
-    public void RestoreHealth(float amount, bool checkhealth = true)
+    public void RestoreHealth(float amount)
     {
-        if (health > 0 || !checkhealth)
+        if (health > 0)
             health = amount;
+    }
+
+    public void ResetHealth(float amount)
+    {
+        health = amount;
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 }

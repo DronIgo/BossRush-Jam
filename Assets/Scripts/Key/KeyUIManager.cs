@@ -56,6 +56,7 @@ public class KeyUIManager : MonoBehaviour
 
     public void EnableKey()
     {
+        if (DeletedButtons.Count == 0) return;
         int r = Random.Range(0, DeletedButtons.Count);
         var key = DeletedButtons[r];
         EnableKey(key);
